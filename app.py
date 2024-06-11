@@ -8,12 +8,23 @@ import io
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from sqlalchemy import LargeBinary
-
+import urllib.parse
 from flask import send_file
 from PIL import Image, ImageDraw, ImageFont
+from flask import app
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# Correct connection string
+params = urllib.parse.quote_plus("DRIVER={ODBC Driver 18 for SQL Server};"
+                                 "SERVER=tcp:myserver126.database.windows.net,1433;"
+                                 "DATABASE=newdb;"
+                                 "UID=samiksha;"
+                                 "PWD=Sneha123;"
+                                 "Encrypt=yes;"
+                                 "TrustServerCertificate=no;"
+                                 "Connection Timeout=30;")
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mssql+pyodbc:///?odbc_connect={params}'
+
 db = SQLAlchemy(app)
 app.secret_key = 'secret_key'
 
